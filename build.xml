@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="dot-task" basedir="." default="jar">
+  <property name="build.sysclasspath" value="last"/>
+  <property name="jar.dir" value="${basedir}/target/jar"/>
+  <property name="src.dir" value="${basedir}/src/main/java"/>
+  <property name="classes.dir" value="${basedir}/target/classes"/>
+
+  <property name="version" value="1.0.0"/>
+
+  <target name="clean">
+    <delete dir="${classes.dir}" failonerror="false"/>
+    <delete dir="${jar.dir}"/>
+  </target>
+
+  <target name="compile" depends="clean">
+    <mkdir dir="${jar.dir}"/>
+    <mkdir dir="${classes.dir}"/>
+
+    <javac srcdir="${src.dir}" destdir="${classes.dir}">
+      <compilerarg value="-Xlint:deprecation"/>
+      <compilerarg value="-Xlint:unchecked"/>
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile">
+    <jar destfile="${jar.dir}/dotTask-${version}.jar" basedir="${classes.dir}"/>
+  </target>
+</project>
