@@ -11,51 +11,24 @@ A simple [Ant][ant] task for publishing things with
 
 ## Installation
 
-**NOTE**: Java 7+ required.
+**NOTE**: Java 7+ and [Ant][ant] required.
 
 ```bash
-git clone https://github.com/eerohele/dottask.git
-cd dottask
-ant
-cp target/jar/dotTask-0.1.0.jar /your/dita/ant/project/path/lib
+$ git clone https://github.com/eerohele/dottask.git
+$ cd dottask
+$ ant
+$ cp target/jar/dotTask-0.1.0.jar /your/dita/ant/project/path/lib
 ```
 
 ## Sample Ant buildfile
 
-```xml
-<project name="docs" default="build" basedir=".">
-  <!-- Let Ant know where your DITA-OT installation is located. -->
-  <property name="dita.home" location="/path/to/dita-ot"/>
+See `samples/build.xml`.
 
-  <!-- Let Ant know where your DITA XML files are. -->
-  <property name="input.dir" location="${basedir}/input"/>
+To run it:
 
-  <!-- Let Ant know where to find the DITA-OT Ant Task. -->
-  <taskdef name="dita-ot"
-           classname="com.github.eerohele.DotTask"
-           classpath="${basedir}/lib/dotTask-0.1.0.jar"/>
-
-  <target name="build">
-    <!--
-    Publish every file with a .ditamap extension in the input directory into
-    HTML5.
-    -->
-    <dita-ot home="${dita.home}" transtype="html5">
-      <fileset dir="${input.dir}" includes="*.ditamap"/>
-
-      <!--
-      Set DITA-OT parameters.
-
-      For information on DITA-OT parameters, see:
-
-      http://www.dita-ot.org/dev/parameters/ant-parameters_intro.html
-      -->
-      <parameter name="args.css" value="${basedir}/resources/css/default.css"/>
-      <parameter name="args.copycss" value="yes"/>
-      <parameter name="processing-mode" value="strict"/>
-    </dita-ot>
-  </target>
-</project>
+```bash
+$ cd samples
+$ ant
 ```
 
 ## Optional attributes

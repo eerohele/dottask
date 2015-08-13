@@ -1,0 +1,50 @@
+<project name="sample" default="build" basedir=".">
+  <property environment="env"/>
+
+  <!-- Tell Ant where your DITA-OT installation is located. -->
+  <property name="dita.home" location="${env.HOME}/Git/dita-ot/src/main"/>
+
+  <!-- Tell Ant where your DITA XML files are. -->
+  <property name="input.dir" location="${basedir}/dita"/>
+
+  <!-- Tell Ant where to store DITA-OT temp and output files. -->
+  <property name="work.dir" location="${basedir}/target"/>
+
+  <!-- Set DITA-OT transtype. -->
+  <property name="transtype" value="html5"/>
+
+  <target name="init">
+    <!--
+    Build dotTask.jar. You obviously don't need to do this in your own
+    buildfile — this is just for this sample.
+    -->
+    <ant antfile="../build.xml" useNativeBasedir="true" target="jar"/>
+
+    <!-- Let Ant know where to find the DITA-OT Ant Task. -->
+    <taskdef name="dita-ot"
+             classname="com.github.eerohele.DotTask"
+             classpath="../target/jar/dotTask-0.1.0.jar"/>
+  </target>
+
+  <target name="build" depends="init">
+    <!--
+    Publish every file with a .ditamap extension in the input directory into
+    HTML5.
+    -->
+    <dita-ot home="${dita.home}" transtype="${transtype}" workdir="${work.dir}">
+      <fileset dir="${input.dir}" includes="*.ditamap"/>
+
+      <!--
+      Set DITA-OT parameters.
+
+      For information on DITA-OT parameters, see:
+
+      http://www.dita-ot.org/dev/parameters/ant-parameters_intro.html
+      -->
+      <parameter name="processing-mode" value="strict"/>
+      <parameter name="force-unique" value="true"/>
+      <parameter name="args.rellinks" value="all"/>
+    </dita-ot>
+  </target>
+
+</project>
