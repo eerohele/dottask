@@ -69,9 +69,9 @@ You can set these optional attributes on the `<dita-ot>` element.
 - `inheritAll`
 
     Inherit (almost) all properties from the parent project. The
-    [`args.input`][args-input]
-    parameter isn't inherited because that doesn't make sense. The default is
-    `false`.
+    [`args.input`][args-input], [`output.dir`][output-dir], and
+    [`dita.temp.dir`][dita-temp-dir] parameters aren't inherited because that
+    wouldn't make sense. The default is `false`.
 
 - `fork`
 
@@ -89,4 +89,6 @@ You can set these optional attributes on the `<dita-ot>` element.
 [ant-fileset]: https://ant.apache.org/manual/Types/fileset.html
 [ant]: https://ant.apache.org/
 [args-input]: http://www.dita-ot.org/dev/parameters/ant-parameters-base-transformation.html#ant-parameters-base-transformation__args.input
+[dita-temp-dir]: http://www.dita-ot.org/dev/parameters/ant-parameters-base-transformation.html#ant-parameters-base-transformation__dita.temp.dir
 [dot]: http://www.dita-ot.org
+[output-dir]: http://www.dita-ot.org/dev/parameters/ant-parameters-base-transformation.html#ant-parameters-base-transformation__output.dir
