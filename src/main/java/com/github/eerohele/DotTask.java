@@ -26,7 +26,6 @@ public class DotTask extends Task {
   private static final String TASK_NAME = "dita-ot";
 
   private Boolean inheritAll = false;
-  private Boolean fork = false;
 
   private String home;
   private String transtype;
