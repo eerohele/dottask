@@ -3,54 +3,48 @@ package com.github.eerohele;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.tools.ant.Main;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.launch.Launcher;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.Java;
+import org.apache.tools.ant.taskdefs.Property;
 
 import org.apache.tools.ant.types.Commandline.Argument;
 import org.apache.tools.ant.types.Environment.Variable;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Path;
 
+import com.github.eerohele.Constants;
+import com.github.eerohele.Parameters;
+
 public class DotTask extends Task {
-  String TASK_NAME = "dita-ot";
+  private static final String TASK_NAME = "dita-ot";
 
-  String OUT = "out";
-  String TEMP = "temp";
+  private Boolean inheritAll = false;
+  private Boolean fork = false;
 
-  String PARAM_ARGS_INPUT = "args.input";
-  String PARAM_OUTPUT_DIR = "output.dir";
-  String PARAM_TEMP_DIR = "dita.temp.dir";
-
-  String BUILD_XML = "build.xml";
-  String TRANSTYPE = "transtype";
-
-  String PERIOD = ".";
-  String SPACE = " ";
-
-  String PROPS_JAVA_CLASS_PATH = "java.class.path";
-  String FLAGS_BUILDFILE = "-buildfile";
-
-  String[] DITA_CLASSPATH_INCLUDES = { "lib/*.jar", "resources" };
-
-  Boolean fork = false;
-
-  String home;
-  String transtype;
-  String workdir = System.getProperty("java.io.tmpdir");
+  private String home;
+  private String transtype;
+  private String workdir = System.getProperty("java.io.tmpdir");
 
   private ArrayList<FileSet> filesets = new ArrayList<FileSet>();
   private Vector<Parameter> params = new Vector<Parameter>();
 
   public void setFork(Boolean f) {
       fork = f;
+  }
+
+  public void setInheritAll(Boolean i) {
+      inheritAll = i;
   }
 
   public void setHome(String h) {
@@ -86,7 +80,7 @@ public class DotTask extends Task {
 
       Java task = initializeJavaTask(getProject());
       task.setTaskName(TASK_NAME);
-      addSystemProperty(setParameters(task), TRANSTYPE, transtype);
+      addSystemProperty(setParameters(task), Constants.TRANSTYPE, transtype);
 
       ArrayList<File> files = new ArrayList<File>();
 
@@ -121,28 +115,50 @@ public class DotTask extends Task {
       public String getValue() { return value; }
   }
 
+  private Java setInheritedParameters(Java task) {
+    if (inheritAll) {
+      Hashtable<?, ?> props = getProject().getUserProperties();
+      Enumeration<?> e = props.keys();
+
+      while (e.hasMoreElements()) {
+        String key = e.nextElement().toString();
+        String value = props.get(key).toString();
+
+        if (key != Parameters.ARGS_INPUT) {
+          addSystemProperty(task, key, value);
+        }
+      }
+    }
+
+    return task;
+  }
+
   private Java setParameters(Java task) {
     for (Iterator it = params.iterator(); it.hasNext();) {
         Parameter param = (Parameter) it.next();
         addSystemProperty(task, param.getName(), param.getValue());
     }
 
-    return task;
+    return  setInheritedParameters(task);
   }
 
   private void runJavaTaskOnFiles(Java task, List<File> files) {
       for (File file : files) {
           String baseName = getBaseName(file);
 
-          String tempDir = Paths.get(workdir, TASK_NAME, TEMP, baseName)
-                                .toString();
+          String tempDir = Paths.get(workdir,
+                                     TASK_NAME,
+                                     Constants.TEMP,
+                                     baseName).toString();
 
-          String outputDir = Paths.get(workdir, TASK_NAME, OUT, baseName)
-                                  .toString();
+          String outputDir = Paths.get(workdir,
+                                       TASK_NAME,
+                                       Constants.OUT,
+                                       baseName).toString();
 
-          addSystemProperty(task, PARAM_ARGS_INPUT, file.getPath());
-          addSystemProperty(task, PARAM_TEMP_DIR, tempDir);
-          addSystemProperty(task, PARAM_OUTPUT_DIR, outputDir);
+          addSystemProperty(task, Parameters.ARGS_INPUT, file.getPath());
+          addSystemProperty(task, Parameters.TEMP_DIR, tempDir);
+          addSystemProperty(task, Parameters.OUTPUT_DIR, outputDir);
 
           task.executeJava();
       }
@@ -151,7 +167,7 @@ public class DotTask extends Task {
   private String getBaseName(File file) {
     String fileName = file.getName();
 
-    int pos = fileName.lastIndexOf(PERIOD);
+    int pos = fileName.lastIndexOf(Constants.PERIOD);
 
     if (pos > 0) {
         return fileName.substring(0, pos);
@@ -169,17 +185,21 @@ public class DotTask extends Task {
   }
 
   private Path makeClassPath(Project p) {
-    Path classPath = new Path(p, System.getProperty(PROPS_JAVA_CLASS_PATH));
+    Path classPath = new Path(p, System.getProperty("java.class.path"));
     FileSet fs = new FileSet();
     fs.setDir(new File(home));
-    fs.appendIncludes(DITA_CLASSPATH_INCLUDES);
+    fs.appendIncludes(Constants.DITA_CLASSPATH_INCLUDES);
     classPath.addFileset(fs);
     return classPath;
   }
 
   private Java setBuildFile(Java task) {
     Argument arg = task.createArg();
-    arg.setLine(FLAGS_BUILDFILE + SPACE + new File(home, BUILD_XML).getPath());
+
+    arg.setLine(Constants.ANTFLAGS_BUILDFILE +
+                Constants.SPACE +
+                new File(home, Main.DEFAULT_BUILD_FILENAME).getPath());
+
     return task;
   }
 

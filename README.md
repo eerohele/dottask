@@ -1,12 +1,12 @@
 # DITA-OT Ant Task
 
-A simple [Ant](https://ant.apache.org/) task for publishing things with
-[DITA Open Toolkit](http://www.dita-ot.org).
+A simple [Ant][ant] task for publishing things with
+[DITA Open Toolkit][dot].
 
 ## Features
 
 - No need to set classpath.
-- You can use [Ant filesets](https://ant.apache.org/manual/Types/fileset.html) to publish many files at once.
+- You can use [Ant filesets][ant-fileset] to publish many files at once.
 - Platform-independent.
 
 ## Installation
@@ -66,6 +66,13 @@ You can set these optional attributes on the `<dita-ot>` element.
 
     The directory where to store temporary and output files. The default is `${java.io.tmpdir}/dita-ot`.
 
+- `inheritAll`
+
+    Inherit (almost) all properties from the parent project. The
+    [`args.input`][args-input]
+    parameter isn't inherited because that doesn't make sense. The default is
+    `false`.
+
 - `fork`
 
     Create a new Java Virtual Machine for running DITA-OT. The default is `false`.
@@ -77,8 +84,9 @@ You can set these optional attributes on the `<dita-ot>` element.
 
 ## TODO
 
-- Support inheriting properties from the parent project
-- Support Java property files
 - Publish to Maven Central (if there's interest)
 
-
+[ant-fileset]: https://ant.apache.org/manual/Types/fileset.html
+[ant]: https://ant.apache.org/
+[args-input]: http://www.dita-ot.org/dev/parameters/ant-parameters-base-transformation.html#ant-parameters-base-transformation__args.input
+[dot]: http://www.dita-ot.org
