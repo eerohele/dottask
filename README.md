@@ -46,6 +46,10 @@ You can set these optional attributes on the `<dita-ot>` element.
     [`dita.temp.dir`][dita-temp-dir] parameters aren't inherited because that
     wouldn't make sense. The default is `false`.
 
+- `verbose`
+
+    Run Ant in verbose mode. The default is `false`.
+
 ## Caveats
 
 - Only very cursorily tested on Java 7+, DITA-OT 1.8.x, DITA-OT 2.x, and default DITA-OT plugins at the moment. Help appreciated.

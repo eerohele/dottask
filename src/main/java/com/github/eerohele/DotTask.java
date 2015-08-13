@@ -26,6 +26,7 @@ public class DotTask extends Task {
   private static final String TASK_NAME = "dita-ot";
 
   private Boolean inheritAll = false;
+  private Boolean verbose = false;
 
   private String home;
   private String transtype;
@@ -44,6 +45,10 @@ public class DotTask extends Task {
 
   public void setTranstype(String t) {
       transtype = t;
+  }
+
+  public void setVerbose(boolean v) {
+      verbose = v;
   }
 
   public void setWorkdir(String w) {
@@ -179,6 +184,15 @@ public class DotTask extends Task {
     return classPath;
   }
 
+  private Java setVerbosity(Java task) {
+    if (verbose) {
+        Argument arg = task.createArg();
+        arg.setLine(Constants.ANTFLAGS_VERBOSE);
+    }
+
+    return task;
+  }
+
   private Java setBuildFile(Java task) {
     Argument arg = task.createArg();
 
@@ -195,6 +209,6 @@ public class DotTask extends Task {
     task.setFork(true);
     task.setProject(p);
     task.setClasspath(makeClassPath(p));
-    return setBuildFile(task);
+    return setVerbosity(setBuildFile(task));
   }
 }
