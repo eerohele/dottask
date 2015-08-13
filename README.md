@@ -28,7 +28,7 @@ cp target/jar/dotTask-0.1.0.jar /your/dita/ant/project/path/lib
   <property name="dita.home" location="/path/to/dita-ot"/>
 
   <!-- Let Ant know where your DITA XML files are. -->
-  <property name="input.dir" location="${basedir}/input"
+  <property name="input.dir" location="${basedir}/input"/>
 
   <!-- Let Ant know where to find the DITA-OT Ant Task. -->
   <taskdef name="dita-ot"
