@@ -48,7 +48,7 @@ You can set these optional attributes on the `<dita-ot>` element.
 
 ## Caveats
 
-- Only tested on Java 7+, DITA-OT 2.1, and default DITA-OT plugins at the moment.
+- Only very cursorily tested on Java 7+, DITA-OT 1.8.x, DITA-OT 2.x, and default DITA-OT plugins at the moment. Help appreciated.
 - I resemble a Java programmer about as closely as I resemble George Clooney.
 
 ## TODO

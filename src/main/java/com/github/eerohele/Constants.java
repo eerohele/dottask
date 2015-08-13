@@ -3,7 +3,7 @@ package com.github.eerohele;
 public final class Constants {
     public static final String ANTFLAGS_BUILDFILE = "-buildfile";
     public static final String[] DITA_CLASSPATH_INCLUDES = {
-        "lib/*.jar", "resources"
+        "lib/*.jar", "lib/saxon/*.jar", "resources"
     };
 
     public static final String OUT = "out";
