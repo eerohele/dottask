@@ -4,10 +4,8 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
-import java.util.stream.Collectors;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
@@ -90,14 +88,14 @@ public class DotTask extends Task {
       task.setTaskName(TASK_NAME);
       addSystemProperty(setParameters(task), TRANSTYPE, transtype);
 
+      ArrayList<File> files = new ArrayList<File>();
+
       for (FileSet fs : filesets) {
           DirectoryScanner ds = fs.getDirectoryScanner(getProject());
 
-          List<File> files =
-            Arrays.asList(ds.getIncludedFiles())
-                  .stream()
-                  .map(path -> new File(fs.getDir(), path))
-                  .collect(Collectors.toList());
+          for (String path : ds.getIncludedFiles()) {
+            files.add(new File(fs.getDir(), path));
+          }
 
           runJavaTaskOnFiles(task, files);
       }
