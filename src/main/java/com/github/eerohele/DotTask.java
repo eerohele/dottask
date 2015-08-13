@@ -16,15 +16,11 @@ import org.apache.tools.ant.launch.Launcher;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.Java;
-import org.apache.tools.ant.taskdefs.Property;
 
 import org.apache.tools.ant.types.Commandline.Argument;
 import org.apache.tools.ant.types.Environment.Variable;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Path;
-
-import com.github.eerohele.Constants;
-import com.github.eerohele.Parameters;
 
 public class DotTask extends Task {
   private static final String TASK_NAME = "dita-ot";
@@ -139,7 +135,7 @@ public class DotTask extends Task {
         addSystemProperty(task, param.getName(), param.getValue());
     }
 
-    return  setInheritedParameters(task);
+    return setInheritedParameters(task);
   }
 
   private void runJavaTaskOnFiles(Java task, List<File> files) {
