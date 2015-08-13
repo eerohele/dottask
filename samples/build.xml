@@ -29,7 +29,7 @@
   <target name="build" depends="init">
     <!--
     Publish every file with a .ditamap extension in the input directory into
-    HTML5.
+    the selected output format (defined by the "transtype" property).
     -->
     <dita-ot home="${dita.home}" transtype="${transtype}" workdir="${work.dir}">
       <fileset dir="${input.dir}" includes="*.ditamap"/>
