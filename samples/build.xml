@@ -11,7 +11,7 @@
   <property name="work.dir" location="${basedir}/target"/>
 
   <!-- Set DITA-OT transtype. -->
-  <property name="transtype" value="html5"/>
+  <property name="transtype" value="xhtml"/>
 
   <target name="init">
     <!--
