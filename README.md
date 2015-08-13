@@ -28,7 +28,7 @@ To run it:
 
 ```bash
 $ cd samples
-$ ant
+$ ant -Ddita.home=/path/to/your/dita-ot/installation
 ```
 
 ## Optional attributes
