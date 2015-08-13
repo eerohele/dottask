@@ -35,10 +35,6 @@ public class DotTask extends Task {
   private ArrayList<FileSet> filesets = new ArrayList<FileSet>();
   private Vector<Parameter> params = new Vector<Parameter>();
 
-  public void setFork(Boolean f) {
-      fork = f;
-  }
-
   public void setInheritAll(Boolean i) {
       inheritAll = i;
   }
@@ -199,7 +195,7 @@ public class DotTask extends Task {
   private Java initializeJavaTask(Project p) {
     Java task = new Java();
     task.setClassname(Launcher.class.getName());
-    task.setFork(fork);
+    task.setFork(true);
     task.setProject(p);
     task.setClasspath(makeClassPath(p));
     return setBuildFile(task);

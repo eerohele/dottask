@@ -73,10 +73,6 @@ You can set these optional attributes on the `<dita-ot>` element.
     [`dita.temp.dir`][dita-temp-dir] parameters aren't inherited because that
     wouldn't make sense. The default is `false`.
 
-- `fork`
-
-    Create a new Java Virtual Machine for running DITA-OT. The default is `false`.
-
 ## Caveats
 
 - Only tested on Java 7+, DITA-OT 2.1, and default DITA-OT plugins at the moment.
