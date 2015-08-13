@@ -136,12 +136,10 @@ public class DotTask extends Task {
           String baseName = getBaseName(file);
 
           String tempDir = Paths.get(workdir,
-                                     TASK_NAME,
                                      Constants.TEMP,
                                      baseName).toString();
 
           String outputDir = Paths.get(workdir,
-                                       TASK_NAME,
                                        Constants.OUT,
                                        baseName).toString();
 

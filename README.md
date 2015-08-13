@@ -64,7 +64,7 @@ You can set these optional attributes on the `<dita-ot>` element.
 
 - `workdir`
 
-    The directory where to store temporary and output files. The default is `${java.io.tmpdir}/dita-ot`.
+    The directory where to store temporary and output files. The default is `${java.io.tmpdir}`.
 
 - `inheritAll`
 
