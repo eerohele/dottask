@@ -119,10 +119,7 @@ public class DotTask extends Task {
       while (e.hasMoreElements()) {
         String key = e.nextElement().toString();
         String value = props.get(key).toString();
-
-        if (key != Parameters.ARGS_INPUT) {
-          addSystemProperty(task, key, value);
-        }
+        addSystemProperty(task, key, value);
       }
     }
 
