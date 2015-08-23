@@ -25,6 +25,7 @@ import org.apache.tools.ant.types.Path;
 public class DotTask extends Task {
   private static final String TASK_NAME = "dita-ot";
 
+  private Boolean failOnError = true;
   private Boolean inheritAll = false;
   private Boolean verbose = false;
 
@@ -34,6 +35,10 @@ public class DotTask extends Task {
 
   private ArrayList<FileSet> filesets = new ArrayList<FileSet>();
   private Vector<Parameter> params = new Vector<Parameter>();
+
+  public void setFailOnError(Boolean f) {
+      failOnError = f;
+  }
 
   public void setInheritAll(Boolean i) {
       inheritAll = i;
@@ -151,7 +156,9 @@ public class DotTask extends Task {
           addSystemProperty(task, Parameters.TEMP_DIR, tempDir);
           addSystemProperty(task, Parameters.OUTPUT_DIR, outputDir);
 
-          task.executeJava();
+          if (task.executeJava() != 0 && failOnError) {
+              throw new RuntimeException("There was an error processing " + file.getPath() + ", aborting build.");
+          }
       }
   }
 

@@ -35,9 +35,15 @@ $ ant -Ddita.home=/path/to/your/dita-ot/installation
 
 You can set these optional attributes on the `<dita-ot>` element.
 
+- `failOnError`
+
+    Halt execution if DITA-OT fails to process a document. The default is
+    `true`.
+
 - `workdir`
 
-    The directory where to store temporary and output files. The default is `${java.io.tmpdir}`.
+    The directory where to store temporary and output files. The default is
+    `${java.io.tmpdir}`.
 
 - `inheritAll`
 
@@ -52,7 +58,8 @@ You can set these optional attributes on the `<dita-ot>` element.
 
 ## Caveats
 
-- Only very cursorily tested on Java 7+, DITA-OT 1.8.x, DITA-OT 2.x, and default DITA-OT plugins at the moment. Help appreciated.
+- Only very cursorily tested on Java 7+, DITA-OT 1.8.x, DITA-OT 2.x, and default
+  DITA-OT plugins at the moment. Help appreciated.
 - I resemble a Java programmer about as closely as I resemble George Clooney.
 
 ## TODO
