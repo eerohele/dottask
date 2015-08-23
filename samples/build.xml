@@ -47,4 +47,8 @@
     </dita-ot>
   </target>
 
+  <target name="clean">
+    <delete dir="${work.dir}"/>
+  </target>
+
 </project>
