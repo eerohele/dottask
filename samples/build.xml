@@ -7,8 +7,8 @@
   <!-- Tell Ant where your DITA XML files are. -->
   <property name="input.dir" location="${basedir}/dita"/>
 
-  <!-- Tell Ant where to store DITA-OT temp and output files. -->
-  <property name="work.dir" location="${basedir}/target"/>
+  <!-- Tell Ant where to store DITA-OT output files. -->
+  <property name="output.dir" location="${basedir}/target"/>
 
   <!-- Set DITA-OT transtype. -->
   <property name="transtype" value="xhtml"/>
@@ -31,8 +31,10 @@
     Publish every file with a .ditamap extension in the input directory into
     the selected output format (defined by the "transtype" property).
     -->
-    <dita-ot home="${dita.home}" transtype="${transtype}" workdir="${work.dir}">
-      <fileset dir="${input.dir}" includes="*.ditamap"/>
+    <dita-ot home="${dita.home}"
+             transtype="${transtype}"
+             outputdir="${output.dir}">
+      <fileset dir="${input.dir}" includes="**/*.ditamap"/>
 
       <!--
       Set DITA-OT parameters.
@@ -48,7 +50,7 @@
   </target>
 
   <target name="clean">
-    <delete dir="${work.dir}"/>
+    <delete dir="${output.dir}"/>
   </target>
 
 </project>

@@ -20,7 +20,11 @@ import org.apache.tools.ant.taskdefs.Java;
 import org.apache.tools.ant.types.Commandline.Argument;
 import org.apache.tools.ant.types.Environment.Variable;
 import org.apache.tools.ant.types.FileSet;
+import org.apache.tools.ant.types.Mapper;
 import org.apache.tools.ant.types.Path;
+
+import org.apache.tools.ant.util.FileNameMapper;
+import org.apache.tools.ant.util.GlobPatternMapper;
 
 public class DotTask extends Task {
   private static final String TASK_NAME = "dita-ot";
@@ -31,7 +35,9 @@ public class DotTask extends Task {
 
   private String home;
   private String transtype;
-  private String workdir = System.getProperty("java.io.tmpdir");
+  private String outputdir = System.getProperty("java.io.tmpdir");
+
+  protected Mapper mapperElement = null;
 
   private ArrayList<FileSet> filesets = new ArrayList<FileSet>();
   private Vector<Parameter> params = new Vector<Parameter>();
@@ -56,12 +62,40 @@ public class DotTask extends Task {
       verbose = v;
   }
 
-  public void setWorkdir(String w) {
-      workdir = w;
+  public void setOutputDir(String w) {
+      outputdir = w;
   }
 
   public void addFileset(FileSet f) {
       filesets.add(f);
+  }
+
+  private FileNameMapper getMapper(File file) {
+      FileNameMapper mapper = null;
+
+      if (mapperElement != null) {
+          mapper = mapperElement.getImplementation();
+      } else {
+          mapper = new GlobPatternMapper();
+          mapper.setFrom(file.getParent() + "/*");
+          mapper.setTo(outputdir + "/*");
+      }
+
+      return mapper;
+  }
+
+  public Mapper createMapper() throws BuildException {
+      if (mapperElement != null) {
+          throw new BuildException("Cannot define more than one mapper",
+                                   getLocation());
+      }
+
+      mapperElement = new Mapper(getProject());
+      return mapperElement;
+  }
+
+  public void add(final FileNameMapper fileNameMapper) {
+      createMapper().add(fileNameMapper);
   }
 
   protected void validate() {
@@ -142,29 +176,23 @@ public class DotTask extends Task {
 
   private void runJavaTaskOnFiles(Java task, List<File> files) {
       for (File file : files) {
-          String baseName = getBaseName(file);
-
-          String tempDir = Paths.get(workdir,
-                                     Constants.TEMP,
-                                     baseName).toString();
-
-          String outputDir = Paths.get(workdir,
-                                       Constants.OUT,
-                                       baseName).toString();
+          String fileName = file.getPath();
+          String mappedFileName = getMapper(file).mapFileName(fileName)[0];
+          String mappedOutputDir = stripExtension(mappedFileName);
 
           addSystemProperty(task, Parameters.ARGS_INPUT, file.getPath());
-          addSystemProperty(task, Parameters.TEMP_DIR, tempDir);
-          addSystemProperty(task, Parameters.OUTPUT_DIR, outputDir);
+          addSystemProperty(task, Parameters.OUTPUT_DIR, mappedOutputDir);
 
           if (task.executeJava() != 0 && failOnError) {
-              throw new RuntimeException("There was an error processing " + file.getPath() + ", aborting build.");
+              throw new RuntimeException(
+                  String.format(
+                    "There was an error processing %s, aborting build.",
+                    fileName));
           }
       }
   }
 
-  private String getBaseName(File file) {
-    String fileName = file.getName();
-
+  private String stripExtension(String fileName) {
     int pos = fileName.lastIndexOf(Constants.PERIOD);
 
     if (pos > 0) {
